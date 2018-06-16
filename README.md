@@ -83,6 +83,14 @@ FaSSアトレ川崎店 - atrekawasaki
  　06) 213
 ```
 
+### Watch your reservation
+
+```sh
+> hubot fass futakotamagawarisesc w 39
+
+@sugarhsin あと 3 人で順番がきます
+```
+
 ## License
 
 [MIT][license-url]
