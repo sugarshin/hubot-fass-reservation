@@ -18,7 +18,8 @@
   },
   "homepage": "https://github.com/sugarshin/hubot-fass-reservation#readme",
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+    "prepublishOnly": "npm test"
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
