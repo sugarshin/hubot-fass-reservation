@@ -85,7 +85,11 @@ module.exports = (robot) ->
                 if currentIndex is 0
                   msg.reply '順番がきました'
                   return true
-                else if currentIndex is 3 and (isNull(prevIndex) or currentIndex < prevIndex)
+
+                if isNull(prevIndex)
+                  msg.send "`#{numberStr}` 番の監視を開始します"
+
+                if currentIndex is 3 and (isNull(prevIndex) or currentIndex < prevIndex)
                   msg.reply 'あと 3 人で順番がきます'
                 else if currentIndex is 5 and (isNull(prevIndex) or currentIndex < prevIndex)
                   msg.reply 'あと 5 人で順番がきます'
