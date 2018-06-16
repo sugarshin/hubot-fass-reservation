@@ -3,6 +3,7 @@
   "description": "A Hubot script for utilities of FaSS reservation",
   "version": "0.0.0",
   "author": "Shingo Sato <shinsugar@gmail.com>",
+  "main": "index.coffee",
   "license": "MIT",
   "keywords": [
     "hubot",
@@ -16,27 +17,29 @@
     "url": "https://github.com/sugarshin/hubot-fass-reservation/issues"
   },
   "homepage": "https://github.com/sugarshin/hubot-fass-reservation#readme",
-  "dependencies": {},
-  "peerDependencies": {
-    "hubot": "2.x"
-  },
-  "devDependencies": {
-    "hubot-test-helper": "^1.3.0",
-    "chai": "^2.1.1",
-    "coffee-script": "1.6.3",
-    "grunt": "^0.4.5",
-    "grunt-cli": "^0.1.13",
-    "grunt-contrib-watch": "~0.6.1",
-    "grunt-mocha-test": "~0.12.7",
-    "grunt-release": "~0.11.0",
-    "hubot": "2.x",
-    "matchdep": "~0.3.0",
-    "mocha": "^2.1.0",
-    "sinon": "^1.13.0",
-    "sinon-chai": "^2.7.0"
-  },
-  "main": "index.coffee",
   "scripts": {
     "test": "grunt test"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "iconv-lite": "^0.4.23",
+    "lodash": "^4.17.10",
+    "ms": "^2.1.1",
+    "request": "^2.87.0",
+    "request-promise-native": "^1.0.5"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "coffee-script": "^1.12.7",
+    "grunt": "^1.0.3",
+    "grunt-cli": "^1.2.0",
+    "grunt-contrib-watch": "^1.1.0",
+    "grunt-mocha-test": "^0.13.3",
+    "hubot": "^2.19.0",
+    "hubot-test-helper": "^1.9.0",
+    "matchdep": "^2.0.0",
+    "mocha": "^5.2.0",
+    "sinon": "^6.0.0",
+    "sinon-chai": "^3.2.0"
   }
 }

@@ -1,5 +1,6 @@
 Helper = require('hubot-test-helper')
 chai = require 'chai'
+listFixture = require './fixtures/list'
 
 expect = chai.expect
 
@@ -12,16 +13,35 @@ describe 'fass-reservation', ->
   afterEach ->
     @room.destroy()
 
-  it 'responds to hello', ->
-    @room.user.say('alice', '@hubot hello').then =>
+  it 'responds to fass <salon id> rsv', ->
+    @room.user.say('sugarshin', 'hubot fass futakotamagawarisesc rsv').then =>
       expect(@room.messages).to.eql [
-        ['alice', '@hubot hello']
-        ['hubot', '@alice hello!']
+        ['sugarshin', 'hubot fass futakotamagawarisesc rsv']
+        ['hubot', 'No implemention yet.']
       ]
 
-  it 'hears orly', ->
-    @room.user.say('bob', 'just wanted to say orly').then =>
+  it 'responds to fass list', ->
+    @room.user.say('sugarshin', 'hubot fass list').then =>
       expect(@room.messages).to.eql [
-        ['bob', 'just wanted to say orly']
-        ['hubot', 'yarly']
+        ['sugarshin', 'hubot fass list']
+        ['hubot', listFixture]
+      ]
+
+  it 'responds to fass <dummy> w', ->
+    @room.user.say('sugarshin', 'hubot fass foo w').then =>
+      expect(@room.messages).to.eql [
+        ['sugarshin', 'hubot fass foo w']
+        ['hubot', "I don't know such a salon: `foo`. You can check with `hubot fass list`"]
+      ]
+
+  it 'responds to fass <salon id> w', ->
+    @room.user.say('sugarshin', 'hubot fass futakotamagawarisesc w').then =>
+      expect(@room.messages).to.eql [
+        ['sugarshin', 'hubot fass futakotamagawarisesc w']
+      ]
+
+  it 'responds to fass <salon id> w 100', ->
+    @room.user.say('sugarshin', 'hubot fass futakotamagawarisesc w 100').then =>
+      expect(@room.messages).to.eql [
+        ['sugarshin', 'hubot fass futakotamagawarisesc w 100']
       ]

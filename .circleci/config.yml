@@ -1,0 +1,28 @@
+version: 2
+jobs:
+  test: &test
+    docker:
+      - image: node:8.11.3
+    working_directory: ~/hubot-fass-reservation
+    steps:
+      - checkout
+      - restore_cache: &restore_cache
+          keys:
+            - yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - yarn-packages-{{ .Branch }}
+      - run:
+          name: Install dependencies
+          command: yarn
+      - run:
+          name: Testing
+          command: yarn test
+      - save_cache:
+          paths:
+            - ~/hubot-fass-reservation/node_modules
+            - ~/.cache/yarn/
+          key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+workflows:
+  version: 2
+  hubot-fass-reservation:
+    jobs:
+      - test
