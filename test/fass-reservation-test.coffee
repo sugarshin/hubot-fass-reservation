@@ -6,7 +6,7 @@ expect = chai.expect
 
 helper = new Helper('../src/fass-reservation.coffee')
 
-describe 'fass-reservation', ->
+describe 'hubot-fass-reservation', ->
   beforeEach ->
     @room = helper.createRoom()
 
@@ -20,10 +20,10 @@ describe 'fass-reservation', ->
         ['hubot', 'No implemention yet.']
       ]
 
-  it 'responds to fass list', ->
-    @room.user.say('sugarshin', 'hubot fass list').then =>
+  it 'responds to fass ls', ->
+    @room.user.say('sugarshin', 'hubot fass ls').then =>
       expect(@room.messages).to.eql [
-        ['sugarshin', 'hubot fass list']
+        ['sugarshin', 'hubot fass ls']
         ['hubot', listFixture]
       ]
 

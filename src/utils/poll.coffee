@@ -4,7 +4,7 @@ module.exports = (url, comparator, interval = ms('1m')) ->
   timerId = null
   new Promise (resolve, reject) ->
     do f = () ->
-      getHtml url
+      getHtml(url)
       .then (html) ->
         if comparator html
           clearTimeout timerId
