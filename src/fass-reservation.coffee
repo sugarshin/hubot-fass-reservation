@@ -45,25 +45,23 @@ module.exports = (robot) ->
       return
     msg.send 'No implemention yet.'
 
-  robot.respond /\s*fass\s+list\s*/i, (msg) ->
+  robot.respond /\s*fass\s+l(?:s|ist)\s*/i, (msg) ->
     msg.send Object.keys(salonMap).map((k) -> ["#{salonMap[k]} - #{k}", "  e.g., `hubot fass #{k} w`"].join '\n').join '\n\n'
 
   robot.respond /\s*fass\s+([a-z0-9]+)\s+w(?:aiting)?(?:\s+(\d+))?\s*/i, (msg) ->
     unless salonMap[msg.match[1].toLowerCase()]
       msg.send "I don't know such a salon: `#{msg.match[1]}`. You can check with `hubot fass list`"
       return
-    if isUndefined msg.match[2]
-      getHtml(getWaitingResultPageUrl(msg.match[1]))
-      .then (html) ->
-        $ = cheerio.load(html)
-        if $(selectors.outsideHours).length > 0
-          msg.send '営業時間外です'
-        else
-          msg.send $(selectors.waitingOrder).text()
-    else
-      numberStr = msg.match[2]
-      getHtml(getWaitingResultPageUrl(msg.match[1]))
-      .then (html) ->
+    waitingResultPageUrl = getWaitingResultPageUrl msg.match[1]
+    getHtml(waitingResultPageUrl)
+    .then (html) ->
+      $ = cheerio.load(html)
+      if $(selectors.outsideHours).length > 0
+        msg.send '営業時間外です'
+      else if isUndefined msg.match[2]
+        msg.send $(selectors.waitingOrder).text()
+      else
+        numberStr = msg.match[2]
         waitingOrder = getWaitingOrder html
         if toNumber(last(waitingOrder)[1]) < toNumber(numberStr)
           msg.send 'その番号では予約されていません'
@@ -74,7 +72,7 @@ module.exports = (robot) ->
         else
           prevIndex = null
           poll(
-            getWaitingResultPageUrl(msg.match[1])
+            waitingResultPageUrl
             (html) ->
               currentWaitingOrder = getWaitingOrder html
               if toNumber(head(currentWaitingOrder)[1]) > toNumber(numberStr)
