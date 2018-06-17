@@ -60,41 +60,43 @@ module.exports = (robot) ->
       $ = cheerio.load(html)
       if $(selectors.outsideHours).length > 0
         msg.send '営業時間外です'
-      else if isUndefined msg.match[2]
+        return
+      if isUndefined msg.match[2]
         msg.send $(selectors.waitingOrder).text()
-      else
-        numberStr = msg.match[2]
-        waitingOrder = getWaitingOrder html
-        if toNumber(last(waitingOrder)[1]) < toNumber(numberStr)
-          msg.send 'その番号では予約されていません'
-          return
-        else if toNumber(head(waitingOrder)[1]) > toNumber(numberStr)
-          msg.reply 'すでに来店済みです'
-          return
-        else
-          prevIndex = null
-          getHtmlPolling = createPoll(
-            getHtml
-            (html) ->
-              currentWaitingOrder = getWaitingOrder html
-              if toNumber(head(currentWaitingOrder)[1]) > toNumber(numberStr)
-                msg.reply '施術を開始したか、予約が取り消されました'
-                return true
-              else
-                currentIndex = currentWaitingOrder.findIndex((o) -> o[1] is numberStr)
-                if currentIndex is 0
-                  msg.reply '順番がきました'
-                  return true
+        return
 
-                if isNull(prevIndex)
-                  msg.send "`#{numberStr}` 番の監視を開始します"
+      numberStr = msg.match[2]
+      waitingOrder = getWaitingOrder html
+      if toNumber(last(waitingOrder)[1]) < toNumber(numberStr)
+        msg.send 'その番号では予約されていません'
+        return
+      if toNumber(head(waitingOrder)[1]) > toNumber(numberStr)
+        msg.reply 'すでに来店済みです'
+        return
 
-                if currentIndex is 3 and (isNull(prevIndex) or currentIndex < prevIndex)
-                  msg.reply 'あと 3 人で順番がきます'
-                else if currentIndex is 5 and (isNull(prevIndex) or currentIndex < prevIndex)
-                  msg.reply 'あと 5 人で順番がきます'
-                prevIndex = currentIndex
-              return false
-          )
-          getHtmlPolling(waitingResultPageUrl).catch (err) -> msg.send "エラーが発生しました #{err.toString()}"
+      prevIndex = null
+      getHtmlPolling = createPoll(
+        getHtml
+        (html) ->
+          if isNull(prevIndex)
+            msg.send "`#{numberStr}` 番の監視を開始します"
+
+          currentWaitingOrder = getWaitingOrder html
+          currentIndex = currentWaitingOrder.findIndex((o) -> o[1] is numberStr)
+          if (currentIndex is -1) or (toNumber(head(currentWaitingOrder)[1]) > toNumber(numberStr))
+            msg.send '施術を開始したか、予約が取り消されました'
+            return true
+
+          if currentIndex is 0
+            msg.reply '順番がきました'
+            return true
+
+          if currentIndex is 3 and (isNull(prevIndex) or currentIndex < prevIndex)
+            msg.reply 'あと 3 人で順番がきます'
+          else if currentIndex is 5 and (isNull(prevIndex) or currentIndex < prevIndex)
+            msg.reply 'あと 5 人で順番がきます'
+          prevIndex = currentIndex
+          return false
+      )
+      getHtmlPolling(waitingResultPageUrl).catch (err) -> msg.send "エラーが発生しました #{err.toString()}"
     .catch (err) -> msg.send "エラーが発生しました #{err.toString()}"
