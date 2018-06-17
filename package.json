@@ -1,7 +1,7 @@
 {
   "name": "hubot-fass-reservation",
   "description": "A Hubot script for utilities of FaSS reservation",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "Shingo Sato <shinsugar@gmail.com>",
   "main": "index.coffee",
   "license": "MIT",
