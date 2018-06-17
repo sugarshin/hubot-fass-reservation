@@ -17,7 +17,7 @@ describe 'hubot-fass-reservation', ->
     @room.user.say('sugarshin', 'hubot fass futakotamagawarisesc rsv').then =>
       expect(@room.messages).to.eql [
         ['sugarshin', 'hubot fass futakotamagawarisesc rsv']
-        ['hubot', 'No implemention yet.']
+        ['hubot', 'Not implemented yet. Please ask https://sugarshin.net/']
       ]
 
   it 'responds to fass ls', ->
@@ -31,7 +31,7 @@ describe 'hubot-fass-reservation', ->
     @room.user.say('sugarshin', 'hubot fass foo w').then =>
       expect(@room.messages).to.eql [
         ['sugarshin', 'hubot fass foo w']
-        ['hubot', "I don't know such a salon: `foo`. You can check with `hubot fass list`"]
+        ['hubot', "I don't know such a salon: `foo`. You can check with `hubot fass ls`"]
       ]
 
   it 'responds to fass <salon id> w', ->
