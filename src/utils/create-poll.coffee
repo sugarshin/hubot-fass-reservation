@@ -1,14 +1,13 @@
 ms = require 'ms'
-getHtml = require './get-html'
-module.exports = (url, comparator, interval = ms('1m')) ->
+module.exports = (asyncFunc, comparator, interval = ms('1m')) -> (args...) ->
   timerId = null
   new Promise (resolve, reject) ->
     do f = () ->
-      getHtml(url)
-      .then (html) ->
-        if comparator html
+      asyncFunc(args...)
+      .then (result) ->
+        if comparator result
           clearTimeout timerId
-          resolve html
+          resolve result
         else
           timerId = setTimeout f, interval
       .catch (err) ->

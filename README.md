@@ -33,7 +33,7 @@ Then add **hubot-fass-reservation** to your `external-scripts.json`:
 ### List salon
 
 ```sh
-> hubot fass list
+> hubot fass ls
 
 FaSS有楽町マルイ店 - yurakuchomarui
   e.g., `hubot fass yurakuchomarui w`
