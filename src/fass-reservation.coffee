@@ -8,7 +8,7 @@
 #   hubot fass list - List salons.
 #   hubot fass <salon id> waiting - List all waiting.
 #   hubot fass <salon id> waiting <number> - Start watch the number in waiting.
-#   hubot fass <salon id> rsv - <reservation> - Reserve.
+#   hubot fass <salon id> reserve - Make a reservation.
 #
 # Author:
 #   Shingo Sato <shinsugar@gmail.com>
@@ -38,20 +38,22 @@ parseWaitingOrderText = (text) ->
 
 getWaitingOrder = (html) -> parseWaitingOrderText cheerio.load(html)(selectors.waitingOrder).text()
 
-module.exports = (robot) ->
-  robot.respond /\s*fass\s+([a-z0-9]+)\s+r(?:sv|eserve)?\s*/i, (msg) ->
-    unless salonMap[msg.match[1].toLowerCase()]
-      msg.send "I don't know such a salon: `#{msg.match[1]}`. You can check with `hubot fass list`"
-      return
-    msg.send 'No implemention yet.'
+existsSalon = (msg) ->
+  unless salonMap[msg.match[1].toLowerCase()]
+    msg.send "I don't know such a salon: `#{msg.match[1]}`. You can check with `hubot fass ls`"
+    return false
+  return true
 
-  robot.respond /\s*fass\s+l(?:s|ist)\s*/i, (msg) ->
+module.exports = (robot) ->
+  robot.respond /\s*fass\s+l(?:s|ist)\s*$/i, (msg) ->
     msg.send Object.keys(salonMap).map((k) -> ["#{salonMap[k]} - #{k}", "  e.g., `hubot fass #{k} w`"].join '\n').join '\n\n'
 
-  robot.respond /\s*fass\s+([a-z0-9]+)\s+w(?:aiting)?(?:\s+(\d+))?\s*/i, (msg) ->
-    unless salonMap[msg.match[1].toLowerCase()]
-      msg.send "I don't know such a salon: `#{msg.match[1]}`. You can check with `hubot fass list`"
-      return
+  robot.respond /\s*fass\s+([a-z0-9]+)\s+r(?:sv|eserve)\s*$/i, (msg) ->
+    return unless existsSalon msg
+    msg.send 'Not implemented yet. Please ask https://sugarshin.net/'
+
+  robot.respond /\s*fass\s+([a-z0-9]+)\s+w(?:aiting)?(?:\s+(\d+))?\s*$/i, (msg) ->
+    return unless existsSalon msg
     waitingResultPageUrl = getWaitingResultPageUrl msg.match[1]
     getHtml(waitingResultPageUrl)
     .then (html) ->
@@ -94,4 +96,5 @@ module.exports = (robot) ->
                 prevIndex = currentIndex
               return false
           )
-          .catch (err) -> msg.send "エラーが発生しました Error: #{err}"
+          .catch (err) -> msg.send "エラーが発生しました #{err.toString()}"
+    .catch (err) -> msg.send "エラーが発生しました #{err.toString()}"
