@@ -15,7 +15,7 @@
 
 { toNumber, head, last, isNull, isUndefined } = require 'lodash'
 cheerio = require 'cheerio'
-poll = require './utils/poll'
+createPoll = require './utils/create-poll'
 getHtml = require './utils/get-html'
 salonMap = require './utils/salon-map'
 
@@ -73,8 +73,8 @@ module.exports = (robot) ->
           return
         else
           prevIndex = null
-          poll(
-            waitingResultPageUrl
+          getHtmlPolling = createPoll(
+            getHtml
             (html) ->
               currentWaitingOrder = getWaitingOrder html
               if toNumber(head(currentWaitingOrder)[1]) > toNumber(numberStr)
@@ -96,5 +96,5 @@ module.exports = (robot) ->
                 prevIndex = currentIndex
               return false
           )
-          .catch (err) -> msg.send "エラーが発生しました #{err.toString()}"
+          getHtmlPolling(waitingResultPageUrl).catch (err) -> msg.send "エラーが発生しました #{err.toString()}"
     .catch (err) -> msg.send "エラーが発生しました #{err.toString()}"
