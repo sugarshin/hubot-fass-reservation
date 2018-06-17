@@ -71,18 +71,15 @@ module.exports = (robot) ->
         msg.send 'その番号では予約されていません'
         return
       if toNumber(head(waitingOrder)[1]) > toNumber(numberStr)
-        msg.reply 'すでに来店済みです'
+        msg.send 'すでに来店済みです'
         return
 
       prevIndex = null
       getHtmlPolling = createPoll(
         getHtml
         (html) ->
-          if isNull(prevIndex)
-            msg.send "`#{numberStr}` 番の監視を開始します"
-
           currentWaitingOrder = getWaitingOrder html
-          currentIndex = currentWaitingOrder.findIndex((o) -> o[1] is numberStr)
+          currentIndex = currentWaitingOrder.findIndex (o) -> o[1] is numberStr
           if (currentIndex is -1) or (toNumber(head(currentWaitingOrder)[1]) > toNumber(numberStr))
             msg.send '施術を開始したか、予約が取り消されました'
             return true
@@ -98,5 +95,8 @@ module.exports = (robot) ->
           prevIndex = currentIndex
           return false
       )
+
+      msg.send "`#{numberStr}` 番の監視を開始します"
       getHtmlPolling(waitingResultPageUrl).catch (err) -> msg.send "エラーが発生しました #{err.toString()}"
+
     .catch (err) -> msg.send "エラーが発生しました #{err.toString()}"
