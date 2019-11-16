@@ -31,6 +31,11 @@ jobs:
     executor: << parameters.e >>
     steps:
       - checkout
+      - run:
+          name: System information
+          command: |
+            node -v
+            npm -v
       - npm/install:
           yarn: true
           cache-key: 'cache-{{ checksum "yarn.lock" }}'
