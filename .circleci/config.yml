@@ -1,28 +1,52 @@
-version: 2
-jobs:
-  test: &test
+version: 2.1
+
+references:
+  workspace_root: &workspace_root
+    ~/repo
+  defaults: &defaults
+    working_directory: *workspace_root
+
+orbs:
+  npm: sugarshin/npm@0.1.5
+
+executors:
+  node8:
+    <<: *defaults
     docker:
-      - image: node:8.11.3
-    working_directory: ~/hubot-fass-reservation
+      - image: circleci/node:8
+  node10:
+    <<: *defaults
+    docker:
+      - image: circleci/node:10
+  node12:
+    <<: *defaults
+    docker:
+      - image: circleci/node:12
+
+jobs:
+  test:
+    parameters:
+      e:
+        type: executor
+    executor: << parameters.e >>
     steps:
       - checkout
-      - restore_cache: &restore_cache
-          keys:
-            - yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
-            - yarn-packages-{{ .Branch }}
-      - run:
-          name: Install dependencies
-          command: yarn
+      - npm/install:
+          yarn: true
+          cache-key: 'cache-{{ checksum "yarn.lock" }}'
       - run:
           name: Testing
           command: yarn test
-      - save_cache:
-          paths:
-            - ~/hubot-fass-reservation/node_modules
-            - ~/.cache/yarn/
-          key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+
 workflows:
-  version: 2
-  hubot-fass-reservation:
+  tests:
     jobs:
-      - test
+      - test:
+          name: test_node8
+          e: node8
+      - test:
+          name: test_node10
+          e: node10
+      - test:
+          name: test_node12
+          e: node12
