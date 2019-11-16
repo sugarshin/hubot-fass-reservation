@@ -1,4 +1,6 @@
 module.exports =
+  frentesengawa: 'FaSSフレンテ仙川店'
+  trainchijiyugaoka: 'FaSSトレインチ自由が丘店'
   yurakuchomarui: 'FaSS有楽町マルイ店'
   yaesuchikagai: 'FaSS八重洲地下街店'
   nakameguro: 'FaSS中目黒店'

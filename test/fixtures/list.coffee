@@ -1,4 +1,10 @@
 module.exports = """
+  FaSSフレンテ仙川店 - frentesengawa
+    e.g., `hubot fass frentesengawa w`
+
+  FaSSトレインチ自由が丘店 - trainchijiyugaoka
+    e.g., `hubot fass trainchijiyugaoka w`
+
   FaSS有楽町マルイ店 - yurakuchomarui
     e.g., `hubot fass yurakuchomarui w`
 
