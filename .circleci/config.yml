@@ -28,6 +28,8 @@ jobs:
     parameters:
       e:
         type: executor
+      n:
+        type: string
     executor: << parameters.e >>
     steps:
       - checkout
@@ -37,11 +39,10 @@ jobs:
             node -v
             npm -v
       - npm/install:
-          yarn: true
-          cache-key: 'cache-{{ checksum "yarn.lock" }}'
+          cache-key: cache-<< parameters.n >>-{{ checksum "package-lock.json" }}
       - run:
           name: Testing
-          command: yarn test
+          command: npm test
 
 workflows:
   tests:
@@ -49,9 +50,12 @@ workflows:
       - test:
           name: test_node8
           e: node8
+          n: node8
       - test:
           name: test_node10
           e: node10
+          n: node10
       - test:
           name: test_node12
           e: node12
+          n: node12
