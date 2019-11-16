@@ -19,7 +19,13 @@
   "homepage": "https://github.com/sugarshin/hubot-fass-reservation#readme",
   "scripts": {
     "test": "grunt test",
-    "prepublishOnly": "npm test"
+    "prepublishOnly": "npm test",
+    "update-pkg-version": "npm --no-git-tag-version version",
+    "postupdate-pkg-version": "git add package.json package-lock.json && MESSAGE=$(node -p \"require('./package.json').version\"); git commit -m $MESSAGE",
+    "u": "npm run update-pkg-version",
+    "u:patch": "npm run u -- patch",
+    "u:minor": "npm run u -- minor",
+    "u:major": "npm run u -- major"
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
