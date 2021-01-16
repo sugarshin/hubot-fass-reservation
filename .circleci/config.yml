@@ -62,7 +62,7 @@ workflows:
       - npm/release:
           executor: node12
           tagging: true
-          ssh-fingerprints: 80:38:86:c3:ea:ae:4c:f3:d7:25:55:b9:ab:83:1a:2a
+          ssh-fingerprints: b7:39:ee:a9:48:cb:94:1f:f7:fa:1c:24:0c:17:99:70
           requires:
             - test_node8
             - test_node10
