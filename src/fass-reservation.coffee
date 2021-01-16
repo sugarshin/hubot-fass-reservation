@@ -22,8 +22,9 @@ salonMap = require './utils/salon-map'
 getWaitingResultPageUrl = (salonId) ->
   "https://wb.goku.ne.jp/FaSS#{salonId}HtmlResult/WaitingResultPage.htm"
 selectors =
-  waitingOrder: 'DIV'
+  waitingOrder: 'body > div > DIV'
   outsideHours: ':contains("ただいまの時間は営業時間外です")'
+  closed: 'body'
 
 ###
   @param {String} - text
@@ -62,7 +63,11 @@ module.exports = (robot) ->
         msg.send '営業時間外です'
         return
       if isUndefined msg.match[2]
-        msg.send $(selectors.waitingOrder).text()
+        $waitingOrder = $ selectors.waitingOrder
+        if $waitingOrder.length > 0
+          msg.send $waitingOrder.text()
+          return
+        msg.send $(selectors.closed).text()
         return
 
       numberStr = msg.match[2]
